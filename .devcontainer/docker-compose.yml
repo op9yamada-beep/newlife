@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    volumes:
+    - ..:/workspaces
+    # コンテナを常駐させるための設定
+    tty: true
+    # dbコンテナが起動してからappを動かすための設定
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: my_database      # 最初に作成されるDB名
+      MYSQL_ROOT_PASSWORD: root_password # rootのパスワード
+      MYSQL_USER: dev_user            # 任意のユーザー名
+      MYSQL_PASSWORD: dev_password    # 任意のパスワード
+    #ports:
+    #  - "3307:3306" # ホスト側のポート:コンテナ側のポート
+    volumes:
+      - mysql-data:/var/lib/mysql # データをコンテナの外に保存する設定
+
+volumes:
+  mysql-data: # データを永続化するためのボリューム定義

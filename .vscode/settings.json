@@ -1,0 +1,8 @@
+{
+    "extensions.ignoreRecommendations": true,
+    "extensions.verifySignature": false,
+    // ここから追記
+    "extensions.denyList": [
+        "ms-azuretools.vscode-docker"
+    ]
+}
