@@ -1,15 +1,16 @@
-// 型定義
-export type ProductItem = {
+// types.ts
+export interface ProductItem {
   productId: string;
   quantity: number;
-};
+}
 
-export type DeliveryItem = {
+export interface DeliveryEntry {
   customerId: string;
+  customerData: string;
   products: ProductItem[];
-};
+}
 
-export type FormValues = {
+export interface FormValues {
   date: string;
-  deliveries: DeliveryItem[];
-};
+  deliveries: DeliveryEntry[];
+}

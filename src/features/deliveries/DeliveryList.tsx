@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
-import type { FormValues } from './types';
-import { supabase } from './supabaseClient';
-
+import type { FormValues } from './deliveries';
 
 // 引数の props に register を追加します
 const ProductList = ({ control, register, dIndex }: any) => {
@@ -52,50 +50,10 @@ const DeliveryManagement = () => {
 
   const [message, setMessage] = useState("");
 
-const onSubmit = async (data: FormValues) => {
-// deliveries 配列の中身を一つずつ順番に処理します
-  for (const delivery of data.deliveries) {
-    
-    // この配送先（delivery）の中にある全商品（products）を処理
-    for (const item of delivery.products) {
-
-      if (!delivery.customerData) {
-       console.warn("顧客が選択されていません");
-       continue;
-      }
-
-      const customer = JSON.parse(delivery.customerData)
-
-          for (const item of delivery.products) {
-            // 2. productId や quantity が空ならスキップする
-             if (!item.productId || item.quantity === 0) {
-              console.warn("商品情報が不完全です");
-               continue;
-             }
-          }
-
-      const { error } = await supabase
-        .from('deliveries')
-        .insert([
-          {
-            customer_id: parseInt(customer.id, 10),
-            customer_name: customer.name,
-            product_id: parseInt(item.productId, 10),
-            product_name: "商品名ダミー",
-            quantity: Number(item.quantity)
-          }
-        ]);
-
-      if (error) {
-        console.error("保存失敗:", error);
-        alert("保存中にエラーが発生しました");
-        return;
-      }
-    }
-  }
-
-  alert("すべての登録が完了しました！");
-};
+  const onSubmit = (data: FormValues) => {
+    console.log("DB送信データ:", data);
+    setMessage(`登録が完了しました (${new Date().toLocaleString()})`);
+  };
 
   return (
     // フォーム全体を中央寄せでカード風に
@@ -106,12 +64,11 @@ const onSubmit = async (data: FormValues) => {
     <div key={delivery.id} className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
       <label className="block text-sm font-medium text-gray-700 mb-1">顧客名</label>
       <select 
-     // IDと名前をまとめて送るためにJSON文字列にする
-     {...register(`deliveries.${dIndex}.customerData`)} 
-       className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-        >
-       <option value={JSON.stringify({ id: "1", name: "山田商会" })}>山田商会</option>
-        <option value={JSON.stringify({ id: "2", name: "山田病院" })}>山田病院</option>
+        {...register(`deliveries.${dIndex}.customerId`)} 
+        className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="1">山田商会</option>
+        <option value="2">山田病院</option>
       </select>
 
       <div className="space-y-2">
@@ -120,16 +77,11 @@ const onSubmit = async (data: FormValues) => {
       
       <button 
         type="button" 
-        onClick={() => appendDelivery({ 
-          customerId: '', 
-          customerData: '',
-          products: [{ productId: '', quantity: 0 }] 
-        })}
+        onClick={() => appendDelivery({ customerId: '', products: [{ productId: '', quantity: 0 }] })}
         className="mt-4 text-sm text-blue-600 hover:underline"
       >
         + 新しい配送先を追加
       </button>
-      
     </div>
   ))}
   
