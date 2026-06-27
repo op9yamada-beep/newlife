@@ -101,3 +101,22 @@
 ### 注意事項
 *   現在、`deliveries` テーブルのRLS（Row Level Security）は「無効（UNRESTRICTED）」になっています。
 *   本番環境へのデプロイやサービス公開時には、必ずセキュリティポリシー（RLS）を設定し、適切なアクセス制限を行ってください。
+
+## マスタ管理機能
+システム内で利用する各種マスタデータ（次回納品対象、ユーザー、顧客属性、注文商品区分）の管理画面を追加しました。
+
+### 実装のポイント
+* **汎用的な編集コンポーネント**: `MasterEditor.tsx` に一括集約しており、`MASTER_CONFIG` を編集するだけで新しいマスタ管理画面を追加可能です。
+* **データ駆動型UI**: マスタを選択すると、定義に基づいたカラムが自動生成されます。
+* **柔軟な保存処理**: Supabaseの `upsert` を活用し、新規追加と更新をシームレスに行います。
+
+### マスタの追加方法
+新しいマスタを追加したい場合は、`MasterEditor.tsx` 内の `MASTER_CONFIG` オブジェクトに設定を追加してください。
+
+```typescript
+// MasterEditor.tsx の MASTER_CONFIG 例
+newMaster: {
+  label: "新しいマスタ名",
+  columns: ["column1", "column2"], // 表示したいカラム名
+  dbTable: "table_name"           // DBのテーブル名
+}
