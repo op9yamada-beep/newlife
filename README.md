@@ -120,3 +120,30 @@ newMaster: {
   columns: ["column1", "column2"], // 表示したいカラム名
   dbTable: "table_name"           // DBのテーブル名
 }
+
+## 認証機能について
+
+本アプリケーションは [Supabase Auth](https://supabase.com/auth) を利用してユーザー認証を管理しています。
+
+### 使用技術
+- **認証基盤**: Supabase Auth
+- **UI コンポーネント**: `@supabase/auth-ui-react`
+- **デザイン**: Tailwind CSS
+
+### ログインフロー
+1. 初回アクセス時、セッションが確認できない場合は `Login.tsx`（ログイン画面）へリダイレクトされます。
+2. ユーザーはメールアドレスとパスワードを使用してサインイン可能です。
+3. ログイン成功後、`session` が保持され、メインのアプリケーション機能へアクセス可能になります。
+
+### 認証処理の実装場所
+- `src/App.tsx`: ログイン状態による画面分岐（ログイン画面 vs メインアプリ）
+- `src/Login.tsx`: 認証UIの表示と制御
+- `src/supabaseClient.ts`: Supabase クライアントの初期化
+
+---
+
+## 2. 実装のポイント（開発メモ）
+
+* **型管理**: `useState<Session | null>(null)` を使用し、Supabaseのセッション型を厳密に管理。
+* **ルーティング**: `react-router-dom` を使用し、ログイン判定を `App.tsx` の最上位で行うことで全画面共通のガードを実装。
+* **依存関係の修正**: React 19 と一部ライブラリの非互換性を回避するため、`package.json` の `overrides` 設定により React 18.3.1 を強制適用。
