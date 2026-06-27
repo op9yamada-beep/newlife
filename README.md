@@ -147,3 +147,31 @@ newMaster: {
 * **型管理**: `useState<Session | null>(null)` を使用し、Supabaseのセッション型を厳密に管理。
 * **ルーティング**: `react-router-dom` を使用し、ログイン判定を `App.tsx` の最上位で行うことで全画面共通のガードを実装。
 * **依存関係の修正**: React 19 と一部ライブラリの非互換性を回避するため、`package.json` の `overrides` 設定により React 18.3.1 を強制適用。
+
+# 納品管理アプリケーション
+
+本アプリケーションは、日々の納品登録業務と、それに関連する商品・顧客マスタの管理を行うための社内向け管理ツールです。
+
+## 技術スタック
+
+* **Frontend**: React, TypeScript, Tailwind CSS
+* **Routing**: React Router
+* **Auth/DB**: Supabase (Supabase Auth, PostgREST)
+* **Form Handling**: React Hook Form
+* **UI Components**: @supabase/auth-ui-react
+
+## 主な機能
+
+1.  **ユーザー認証**: Supabase Auth を利用したメールアドレス認証。
+2.  **セッション管理**: ログイン状態に応じた画面アクセスの制御。
+3.  **納品管理**: 納品業務を行うためのメイン画面。
+4.  **マスタ管理**: `MasterEditor` コンポーネントによる商品・顧客情報のCRUD基盤。
+    * データベース定義と連動したフォームの自動生成。
+
+## 環境構築
+
+開発を始めるには、以下の手順でセットアップしてください。
+
+1. リポジトリをクローンし、依存関係をインストールします。
+   ```bash
+   npm install
