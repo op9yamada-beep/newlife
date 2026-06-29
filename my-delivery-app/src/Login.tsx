@@ -1,61 +1,65 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import DeliveryManagement from './DeliveryManagement';
-import MasterManagement from './MasterManagement';
-import { MasterEditor } from './MasterEditor';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
-import type { Session } from '@supabase/supabase-js';
-import Login from './Login';
+import { useNavigate } from 'react-router-dom';
 
-function App() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // 初回読み込み時のセッション確認
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      setIsLoading(false);
+      alert("ログイン失敗: " + error.message);
+    } else {
+      // 成功したらメイン画面へ飛ばす
+      navigate('/'); 
+      window.location.reload(); 
+    }
+  };
 
-    // ログイン等の認証状態変化をリアルタイムで監視
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  if (loading) return <div>読み込み中...</div>;
-
-  // セッションがない場合はログイン画面を返す
-  if (!session) {
-    return <Login />;
-  }
-
-  // ログイン後はメイン画面を表示
   return (
-    <div>
-      <nav className="p-4 bg-gray-200 border-b">
-        <Link to="/" className="mr-4 text-blue-600">納品登録</Link>
-        <Link to="/master" className="mr-4 text-blue-600">商品・顧客管理</Link>
-        <Link to="/system-master" className="text-blue-600">設定・マスタ</Link>
-      </nav>
-      <main className="p-4">
-      <Routes>
-        {/* 1. 納品管理（デフォルト画面） */}
-        <Route path="/" element={<DeliveryManagement />} />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          システムにログイン
+        </h1>
         
-        {/* 2. 商品・顧客管理　*/}
-        <Route path="/master" element={<MasterManagement />} />
-        
-        {/* 3. その他マスタ管理 */}
-        <Route path="/system-master" element={<MasterEditor />} />
-      </Routes>
-      </main>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">メールアドレス</label>
+            <input 
+              type="email" 
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              onChange={(e) => setEmail(e.target.value)} 
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">パスワード</label>
+            <input 
+              type="password" 
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              onChange={(e) => setPassword(e.target.value)} 
+            />
+          </div>
+
+          <button 
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:bg-gray-400"
+          >
+            {isLoading ? 'ログイン中...' : 'ログイン'}
+          </button>
+        </form>
+      </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Login;
