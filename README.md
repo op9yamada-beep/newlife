@@ -175,3 +175,24 @@ newMaster: {
 1. リポジトリをクローンし、依存関係をインストールします。
    ```bash
    npm install
+
+   # 納品管理システム (Delivery Management System)
+
+本プロジェクトは、商品選択および顧客指定による納品データ登録を効率化するためのプロトタイプシステムです。Supabaseをバックエンドとして利用し、動的なデータ登録を実現しています。
+
+## 主な機能
+- **動的な納品登録**: 複数の配送先・商品データを一度のフォーム入力で登録可能。
+- **データ連動**: 商品マスターデータとリアルタイムに同期した選択肢の表示。
+- **データベース連携**: 入力されたデータをSupabaseの `deliveries` テーブルへ直接保存。
+
+## 技術スタック
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Form Management**: React Hook Form
+- **Backend/Database**: Supabase
+
+## セットアップ手順
+
+1. **リポジトリのクローン**
+   ```bash
+   git clone <リポジトリURL>
+   cd <プロジェクトディレクトリ名>
