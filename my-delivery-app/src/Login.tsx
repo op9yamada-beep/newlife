@@ -24,9 +24,12 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          システムにログイン
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          配送管理システム
         </h1>
+        <p className="text-sm text-gray-400 uppercase tracking-widest mb-8">
+          Log in to continue
+        </p>
         
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

@@ -33,7 +33,7 @@ export const MasterEditor = () => {
 
   return (
     <div className="p-6 bg-gray-100 rounded-lg">
-      <h2 className="text-xl font-bold mb-4">マスタ管理画面</h2>
+      <h2 className="text-xl font-bold mb-4">マスタ管理</h2>
       
       {/* マスタ選択 */}
       <select 
