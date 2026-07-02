@@ -52,6 +52,10 @@ export default function MasterManagement() {
 
           {/* データ表示エリア */}
           <div className="min-h-[128px] space-y-2">
+            <div className="grid grid-cols-2 font-bold mb-2 pb-2 border-b text-sm text-gray-500">
+            <div>{masterType}名</div>
+            <div>注文{masterType}区分</div>
+          </div>
             {dataList.map((item, index) => (
               <div key={index} className="grid grid-cols-2 py-2 border-b border-gray-100 items-center">
                 
@@ -60,7 +64,7 @@ export default function MasterManagement() {
                   <input 
                     type="text" 
                     placeholder="名称を入力..." 
-                    className="border-b p-1 mr-2 focus:border-purple-500 outline-none transition"
+                    className="border-b p-1 mr-2 focus:border-blue-500 outline-none transition"
                     autoFocus
                   />
                 ) : (
