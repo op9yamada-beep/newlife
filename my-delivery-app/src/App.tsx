@@ -6,11 +6,19 @@ import MasterManagement from './MasterManagement';
 import { MasterEditor } from './MasterEditor';
 import Login from './Login';
 
+/**
+ * App Component (Root)
+ * - アプリケーションのルート階層および認証状態のゲートウェイ
+ * * * 主な責務
+ * - 認証状態の監視とログインガードによるアクセス制限
+ * - 認証セッションに基づくメインレイアウトとルーティングの制御
+ * - アプリケーション全体の状態管理の起点
+ */
 function App() {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
   // 1. 初回起動時に現在のログイン状態を確認する
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);

@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { supabase } from './supabaseClient';
 
+/**
+ * ProductList Component
+ * - 納品データ編集・管理用インターフェース
+ * * 主な機能
+ * - 既存データの表示および新規行の動的追加
+ * - 当日分の新規顧客に対するカラムの動的追加
+ */
 const ProductList = ({ control, register, dIndex, productOptions }: any) => {
   const { fields, append } = useFieldArray({ control, name: `deliveries.${dIndex}.products` });
 
+  // 画面（商品追加）の表示
   return (
     <div className="space-y-2">
       {fields.map((item: any, pIndex: number) => (
@@ -40,7 +48,13 @@ const ProductList = ({ control, register, dIndex, productOptions }: any) => {
   );
 };
 
-// 1. フォームを描画する専門のコンポーネント
+/**
+ * FormWrapper Component
+ * - フォーム描画の関心事を分離・カプセル化するレイアウトコンポーネント
+ * * * 主な機能
+ * - フォームの描画ロジックを抽象化し、再利用性を向上
+ * - 宣言的なUI構造を提供し、親コンポーネントとの責務を明確化
+ */
 const FormWrapper = ({ initialValues, products }: { initialValues: any, products: any[] }) => {
   const { register, control, handleSubmit } = useForm({ defaultValues: initialValues });
   const { fields: deliveryFields, append: appendDelivery } = useFieldArray({
@@ -48,6 +62,7 @@ const FormWrapper = ({ initialValues, products }: { initialValues: any, products
     name: "deliveries"
   });
 
+// 送信ボタン押下時に下記1~4.の処理を実行
  const onSubmit = async (data: any) => {
     // 1. マップ定義（IDから名前に変換）
     const customerMap: { [key: string]: string } = { 
@@ -88,6 +103,7 @@ const FormWrapper = ({ initialValues, products }: { initialValues: any, products
     alert("保存しました！");
   };
 
+  // 納品登録画面を表示します
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-xl border border-gray-100">
       <h2 className="text-xl font-bold mb-4 text-gray-800">納品登録</h2>
@@ -109,11 +125,17 @@ const FormWrapper = ({ initialValues, products }: { initialValues: any, products
   );
 };
 
-// 2. データの準備と表示判定を行うメインコンポーネント
+/**
+ * DeliveryManagement Component
+ * - データの準備と表示判定を行うメインコンポーネント
+ * * * 主な機能
+ * - 納品テーブルに紐づく該当マスタデータを取得し表示する
+ */
 const DeliveryManagement = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [initialData, setInitialData] = useState<any>(null);
 
+  // データベースより該当データを取得し表示する
   useEffect(() => {
     const initData = async () => {
       // 1. 商品マスターを取得

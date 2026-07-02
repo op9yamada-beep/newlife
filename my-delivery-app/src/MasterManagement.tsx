@@ -14,10 +14,20 @@ const initialDBData = [
   { name: 'タオル紺', category: '美容室' },
 ];
 
+/**
+ * MasterManagement Component
+ * - 商品・顧客マスタデータ編集・管理用インターフェース
+ * * 主な機能
+ * - 設定に基づく動的なフォーム生成（選択マスタに応じたカラム切り替え）
+ * - 既存データの表示および新規行の動的追加
+ * - TODO:マスタ種別変更時におけるフォーム状態の再初期化とスキーマ切り替え
+ */
 export default function MasterManagement() {
   const [masterType, setMasterType] = useState(MASTER_TYPES[0]);
   const [category, setCategory] = useState(CATEGORY_MAP['商品'][0]);
   const [dataList, setDataList] = useState(initialDBData); // 表示用のステート
+
+  // 画面表示を返します
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">商品・顧客管理</h1>
@@ -71,7 +81,6 @@ export default function MasterManagement() {
                   <span className="text-gray-800 font-medium">{item.name}</span>
                 )}
 
-                {/* 区分は両方とも触れないテキスト表示に統一 */}
                 <span className="text-gray-500 bg-gray-50 px-2 py-1 rounded inline-block w-fit">
                   {item.category}
                 </span>
@@ -79,7 +88,6 @@ export default function MasterManagement() {
             ))}
           </div>
 
-{/* データ行追加ボタン */}
         <button 
           type="button"
           onClick={() => setDataList([...dataList, { name: '新規追加', category: category }])}
@@ -89,7 +97,6 @@ export default function MasterManagement() {
         </button>
       </div>
 
-      {/* 保存ボタン */}
       <button 
         type="button"
         className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-md transition-all"

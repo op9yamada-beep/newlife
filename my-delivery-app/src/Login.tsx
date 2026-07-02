@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Login Component
+ * - ログイン機能を提供
+ * * 主な機能
+ * - React-authを利用しメールアドレス・パスワードで承認処理
+ */
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
+  // メールアドレス・パスワードでログイン承認
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -21,6 +28,7 @@ const Login = () => {
     }
   };
 
+  //ログイン画面を表示します
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">

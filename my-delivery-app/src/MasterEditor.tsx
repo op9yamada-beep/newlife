@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 
-// 1. 各マスタの定義と擬似データを追加
+// 各マスタの定義と擬似データを追加
 const MASTER_CONFIG = {
   product: {
-    label: "商品マスタ",
+    label: "商品属性マスタ",
     columns: ["name", "category"],
-    dbTable: "product_master",
+    dbTable: "product_categories",
     dummyData: [
       { name: 'タオル茶', category: '美容室' },
       { name: 'タオル白', category: '美容室' },
-      { name: 'タオル紺', category: '美容院' },
+      { name: '白衣', category: '病院' },
     ]
   },
   customer: {
-    label: "顧客マスタ",
-    columns: ["name", "address"],
-    dbTable: "customer_master",
+    label: "ユーザーマスタ",
+    columns: ["name", "role"],
+    dbTable: "users",
     dummyData: [
-      { name: '山田商会', address: '東京都千代田区' },
-      { name: '山田病院', address: '大阪府大阪市' },
+      { name: 'OP（山田）', role: 'オペレーター' },
+      { name: '管理者（山本）', role: 'システム管理' },
     ]
   },
   nextDelivery: {
@@ -34,6 +34,14 @@ const MASTER_CONFIG = {
   },
 };
 
+/**
+ * MasterEditor Component
+ * - マスタデータ編集・管理用インターフェース
+ * * 主な機能
+ * - 設定に基づく動的なフォーム生成（選択マスタに応じたカラム切り替え）
+ * - 既存データの表示および新規行の動的追加
+ * - マスタ種別変更時におけるフォーム状態の再初期化とスキーマ切り替え
+ */
 export const MasterEditor = () => {
   // 初期値を 'product' に設定
   const [selectedKey, setSelectedKey] = useState<keyof typeof MASTER_CONFIG>('product');
@@ -51,6 +59,9 @@ export const MasterEditor = () => {
     reset({ rows: config.dummyData });
   }, [selectedKey, reset]);
 
+  //表示エリア:マスタデータの値を繰り返し表示
+  //データ行追加：押下後、新規入力エリア表示
+  //保存:押下後、DBへUPSERT処理
   return (
     <div className="p-6 bg-gray-100 rounded-lg">
       <h2 className="text-xl font-bold mb-4">マスタ管理</h2>
