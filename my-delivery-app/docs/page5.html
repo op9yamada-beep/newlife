@@ -1,0 +1,27 @@
+<div style="font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: auto;">
+  <h2 style="border-bottom: 2px solid #2c3e50; padding-bottom: 10px; color: #2c3e50;">4. ディレクトリ構成と設計思想</h2>
+  
+  <p>現在は開発の迅速性を重視し、機能を直感的に配置した構造を採用しています。今後、機能追加に伴い、関心事の分離（Separation of Concerns）を強化する設計へ移行予定です。</p>
+
+  <div style="background-color: #272822; color: #f8f8f2; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 14px; margin-top: 20px;">
+    <pre style="margin: 0;">
+NEWLIFE/my-delivery-app/src/
+├── App.tsx             # アプリケーションルート
+├── main.tsx            # メインロジック・レンダリング
+├── DeliveryManagement.tsx # 納品管理画面
+├── MasterEditor.tsx    # マスタ編集画面
+├── MasterManagement.tsx # マスタ一覧管理
+├── Login.tsx           # 認証画面
+├── supabaseClient.ts   # Supabase連携クライアント
+├── masters.ts          # データベース定義・型定義
+└── types.ts            # アプリケーション共通型定義
+    </pre>
+  </div>
+
+  <h3 style="color: #2c3e50; margin-top: 30px;">設計の意図と今後の展望</h3>
+  <ul style="padding-left: 20px;">
+    <li><strong>現状（現在の開発フェーズ）：</strong>プロトタイプとして、各機能（Screen）へのアクセスを最優先したフラットな構造を採用。</li>
+    <li><strong>保守性への配慮：</strong><code>supabaseClient.ts</code> に通信を一元化し、ロジックの肥大化を防いでいます。</li>
+    <li><strong>今後の拡張予定：</strong>機能拡大時には、これらを <code>/components</code> や <code>/features</code> ディレクトリへ再配置し、より堅牢なFeature-based Architectureへ最適化する設計思想で開発しています。</li>
+  </ul>
+</div>

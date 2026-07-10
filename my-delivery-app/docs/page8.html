@@ -1,0 +1,34 @@
+  <h3 style="color: #2c3e50;">7.コードハイライト</h3>
+<div style="background-color: #f4f4f9; padding: 20px; border-radius: 8px; border-left: 5px solid #3b82f6;">
+  <h3 style="margin-top: 0;">1. ログイン認証の要点 (Login.tsx)</h3>
+  <p>SupabaseのAuth機能を活用し、セキュアなログインフローを実現しました。</p>
+  <pre style="background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto;">
+// ログイン処理：Supabase Auth連携
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    alert("ログイン失敗: " + error.message); // ユーザーへのフィードバック
+  } else {
+    navigate('/'); // 認証成功時の遷移
+  }
+};</pre>
+</div>
+
+<div style="background-color: #f4f4f9; padding: 20px; border-radius: 8px; border-left: 5px solid #10b981; margin-top: 20px;">
+  <h3 style="margin-top: 0;">2. 動的なデータ管理 (DeliveryManagement.tsx)</h3>
+  <p><code>useFieldArray</code> を利用し、現場の依頼数に応じて「入力欄が動的に増える」UIを実現しました。</p>
+  <pre style="background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto;">
+// フォーム操作：商品追加の動的生成
+const { fields, append } = useFieldArray({ 
+  control, 
+  name: `deliveries.${dIndex}.products` 
+});
+
+// 画面側でのレンダリング
+{fields.map((item, pIndex) => (
+  <select {...register(`...products.${pIndex}.productId`)}>
+    {/* 商品オプションの展開 */}
+  </select>
+))}</pre>
+</div>
