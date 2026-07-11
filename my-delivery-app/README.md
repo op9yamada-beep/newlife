@@ -1,32 +1,83 @@
-# React + TypeScript + Vite
+# 納品管理アプリケーション (Delivery Management System)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+本アプリケーションは、納品予定の登録から商品・顧客マスタの一元管理までを効率化する、クリーニング業務向けのWeb管理ツールです。
 
-Currently, two official plugins are available:
+## 1. 特徴
+* **動的マスタ管理**: `MasterEditor` により、設定変更のみで新しい管理画面を追加可能な設計。
+* **直感的な操作性**: 納品登録や商品選択をスムーズに行えるフォーム UI。
+* **モダンな技術基盤**: React, TypeScript, Supabase を活用した堅牢なアーキテクチャ。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 2. 技術スタック
+| カテゴリ | 技術 | 選定理由 |
+| :--- | :--- | :--- |
+| **Frontend** | React, TypeScript, Tailwind CSS | コンポーネント指向と高い生産性・保守性のため |
+| **Form** | React Hook Form | フォーム状態管理の最適化とバリデーションのため |
+| **Backend/DB** | Supabase (PostgreSQL) | 認証・DB・API生成の統合と開発スピード向上のため |
 
-## React Compiler
+## 3. 主な機能
+* **ユーザー認証**: Supabase Auth によるメールアドレスログイン管理。
+* **納品管理**: 顧客指定と商品・数量の動的な追加・登録処理。
+* **マスタ管理**: `MasterManagement` および `MasterEditor` による汎用 CRUD 基盤。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 4. 開発・設計のこだわり
+* **設定駆動型 (Config-driven) 設計**: `MASTER_CONFIG` オブジェクトを用いることで、マスタごとの個別実装を不要にし、保守性を高めています。
+* **セキュリティ**: 接続情報は環境変数 (`.env`) で管理し、本番環境を見据えた設計を行っています。
+* **コード品質**: 全メソッドに詳細を明記し、コメントの記述ルールを一律化することで、将来的なメンテナンスを容易にしています。
 
-## Expanding the Oxlint configuration
+## 5. セットアップ手順
+bash
+# 依存関係のインストール
+npm install
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+# 開発サーバーの起動
+npm run dev
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## 6. 実装のポイント（開発メモ）
+* **型管理**: `useState<Session | null>` による厳密な認証状態の管理。
+* **ルーティング**: `App.tsx` にログインガードを配置し、未認証ユーザーのアクセスを制御。
+* **依存関係**: React 18.3.1 を強制適用し、安定性を確保。
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 7. トラブルシューティング
+本プロジェクト開発時の主な問題と解決策を以下に示します。
+
+### 環境構築時のトラブルと解決策
+#### 1. コンテナの起動失敗 (Exit code 1)
+* **事象:** `Reopen in Container` 実行時にコンテナが起動しない。
+* **原因:** * プロジェクトフォルダがOneDrive同期対象配下にあり、ファイル同期処理とDockerのファイル監視が競合していた。
+    * VS Codeの古い拡張機能キャッシュの影響。
+* **解決策:**
+    1. プロジェクトフォルダを同期対象外のローカルパスへ移動。
+    2. Docker Desktopにて「WSL 2 integration」が有効であることを確認。
+    3. `Dev Containers: Rebuild Container Without Cache` を実行。
+
+#### 2. プロジェクトファイルが認識されない問題
+* **事象:** コンテナ起動後、ソースコードや `README.md` が表示されない。
+* **原因:** `docker-compose.yml` の `volumes` 設定がプロジェクトルートを正しく参照していなかった。
+* **解決策:**
+    1. `docker-compose.yml` の `volumes` を以下のように修正。
+       ```yaml
+       volumes:
+         - ..:/workspaces:cached
+       ```
+    2. `Rebuild Container` を実行し、最新設定を反映。
+
+## 8. Author
+* GitHub: [@newlife](https://github.com/newlife)
+
+## 今後の技術的展望 (Technical Roadmap)
+**スキーマベースバリデーションの導入:**
+現在の React Hook Form による標準的なバリデーションを刷新し、Zod を導入したスキーマベースのバリデーションへ移行します。
+
+**スキーマベースバリデーションへの移行詳細**
+*1.導入の背景:*
+現在、バリデーションルールは手動定義および一部 deliverySchema.ts への抽出を行っていますが、フォームの複雑化に伴い、TypeScriptの型定義とバリデーションルールの乖離が懸念されます。
+解決策:
+Zod を用いて「型推論」と「バリデーション」を一元管理します。
+*2.期待される効果:*
+ユーザー入力の不整合によるDBエラーを未然に防ぎ、コードの重複（DRY原則）を排除した堅牢なフォーム基盤を構築します。
+*3. UI/UXの高度化:*
+エラーハンドリングの改善: 現在のブラウザ標準および簡易的なエラー表示を刷新し、ユーザーが入力中にリアルタイムでフィードバックを得られるインラインエラー表示コンポーネントを実装予定です。
+
+## 関連資料
+本プロジェクトの詳細な仕様書やUIのコンセプトについては、以下の資料をご参照ください。
+- [設計資料・コンセプト解説 (HTML版)](https://github.com/op9yamada-beep/newlife/tree/main/my-delivery-app/docs/index.html)

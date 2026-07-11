@@ -1,3 +1,5 @@
+## README.mdをnewfile/my-delivery-app/に移動しました。
+
 # 納品管理アプリケーション (Delivery Management System)
 
 本アプリケーションは、納品予定の登録から商品・顧客マスタの一元管理までを効率化する、クリーニング業務向けのWeb管理ツールです。
