@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { supabase } from './supabaseClient';
-import { DELIVERY_RULES } from './validations/deliverySchema';
+import { supabase } from '../utils/supabaseClient';
+import { DELIVERY_RULES } from '../validations/deliverySchema';
 
 /**
  * ProductList Component

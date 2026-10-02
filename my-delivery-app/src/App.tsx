@@ -1,9 +1,9 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient';
-import DeliveryManagement from './DeliveryManagement';
-import MasterManagement from './MasterManagement';
-import { MasterEditor } from './MasterEditor';
+import { supabase } from './utils/supabaseClient';
+import DeliveryManagement from './components/DeliveryManagement';
+import MasterManagement from './components/MasterManagement';
+import { MasterEditor } from './components/MasterEditor';
 import Login from './Login';
 
 /**
